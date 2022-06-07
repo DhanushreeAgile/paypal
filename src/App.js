@@ -13,7 +13,7 @@ function App() {
       {/* <Paypal/> */}
       <BrowserRouter>
       <Route exact path='/' component={Paypal}/>
-      <Route exact path='/payment' component={Payment}/>
+      <Route  path='/payment' component={Payment}/>
       </BrowserRouter>
     </div>
   );
