@@ -3,6 +3,56 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 // import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
+// paypal
+//   .Buttons({
+//     style: {
+//       shape: "rect",
+//       color: "gold",
+//       layout: "horizontal",
+//       label: "paypal",
+//       tagline: false,
+//       height: 52,
+//     },
+//     createOrder: async function () {
+//       const res = await fetch(
+//         "https://www.example.it/payment/paypal/order/create/" + orderID,
+//         {
+//           method: "post",
+//           headers: {
+//             "content-type": "application/json",
+//           },
+//           credentials: "include",
+//         }
+//       );
+//       const data = await res.json();
+//       return data.id;
+//     },
+//     onApprove: async function (data) {
+//       const res = await fetch(
+//         "https://www.example.it/payment/paypal/" +
+//           data.orderID +
+//           "/capture/",
+//         {
+//           method: "post",
+//           headers: {
+//             "content-type": "application/json",
+//           },
+//           credentials: "include",
+//         }
+//       );
+//       const details = await res.json();
+//       if (localStorage.STBOrder) {
+//         localStorage.removeItem("STBOrder");
+//       }
+//       $("#modalPayments").modal("hide");
+//       $("#modalSuccess").modal("show");
+//     },
+//     onCancel: function (data) {},
+//   })
+//   .render("#paypal-button-container");
+// paypal
+// paypal-sandbox
+
 export default function Paypal(props) {
     const [show, setShow] = useState(false);
     const [success, setSuccess] = useState(false);
@@ -24,6 +74,7 @@ export default function Paypal(props) {
 
     // creates a paypal order
     const createOrder = (data, actions) => {
+        debugger
         return actions.order
             .create({
                 purchase_units: [
@@ -48,16 +99,36 @@ export default function Paypal(props) {
 
     // check Approval
     const onApprove = (data, actions) => {
+debugger
         return actions.order.capture().then(function (details) {
             const { payer } = details;
-            console.log("ppppppp",payer)
-            props.history.push("/payment")
+            console.log("ppppppp", payer)
+            // props.history.push("/payment")
             setSuccess(true);
+            // func(data)
         });
     };
+    const func =
+        async function (data) {
+            const res = await fetch(
+              "https://www.sandbox.paypal.com/v2/checkout/orders/" +
+                data.orderID +
+                "/capture",
+              {
+                method: "post",
+                headers: {
+                  "content-type": "application/json",
+                },
+                credentials: "include",
+              }
+            );
+            console.log(data)
+            console.log(res)
+        }
+
     //capture likely error
     const onError = (data, actions) => {
-        console.log("actions=",actions,"data=",data)
+        console.log("actions=", actions, "data=", data)
         // setErrorMessage("An Error occured with your payment ");
         console.log("An Error occured with your payment ");
     };
@@ -83,17 +154,18 @@ export default function Paypal(props) {
                     </div>
                 </div>
             </div>
-            <br/>
-                <div>
-                    {show ? (
-                        <PayPalButtons
-                            style={{ layout: "vertical" }}
-                            createOrder={createOrder}
-                            onApprove={onApprove}
-                            onError={onError}
-                        />
-                    ) : null}
-                </div>
+            <br />
+            <div>
+                {show ? (
+                    <PayPalButtons
+                        style={{ layout: "vertical" }}
+                        createOrder={createOrder}
+                        onApprove={onApprove}
+                        onError={onError}
+                    />
+
+                ) : null}
+            </div>
 
         </PayPalScriptProvider >
     );

@@ -2,17 +2,18 @@
 import { Route } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom';
 import './App.css';
+import App1 from './Component/demo';
 import Payment from './Component/Payment';
 import Paypal from './Component/Paypal';
 
 function App() {
   return (
     <div className="App">
-      
+      {/* <App1/> */}
       {/* <Paypal/> */}
       <BrowserRouter>
-      <Route path='/' component={Paypal}/>
-      <Route path='/payment' component={Payment}/>
+      <Route exact path='/' component={Paypal}/>
+      <Route exact path='/payment' component={Payment}/>
       </BrowserRouter>
     </div>
   );
