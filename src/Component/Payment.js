@@ -1,16 +1,21 @@
 import React from 'react'
 
 function Payment(props) {
+  debugger
+  const {orderDetails}=props
   return (
     <div>
-      {console.log(props.orderDetails)}
+      {console.log(props)}
+      {console.log(typeof orderDetails)}
       {/* {props.orderDetails} */}
-      <table>
+      <p>{orderDetails}</p>
+
+      {/* <table>
         <tr>
-          <td></td>
+          <td>{orderDetails}</td>
           <td></td>
         </tr>
-      </table>
+      </table> */}
     </div>
   )
 }

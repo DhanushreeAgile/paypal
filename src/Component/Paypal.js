@@ -1,20 +1,24 @@
 import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import Payment from "./Payment";
 
-export default function Paypal(props) {
+export default function Paypal() {
     const [show, setShow] = useState(false);
     const [success, setSuccess] = useState(false);
     const [ErrorMessage, setErrorMessage] = useState("");
     const [orderID, setOrderID] = useState(false);
     const [orderDetails, setorderDetails] = useState([])
+    const history = useHistory()
+    useEffect(() => {
 
-   useEffect(() => {
-          
-           if(success)props.history.push("/payment")
-   }, [success])
-   
-    
+        if (success) history.push({
+            pathname: '/payment',
+            state: { orderDetails }
+        })
+    }, [success])
+
+
     const createOrder = (data, actions) => {
         return actions.order.create({
             purchase_units: [
@@ -38,11 +42,11 @@ export default function Paypal(props) {
         return actions.order.capture().then(function (details) {
             setSuccess(true);
             console.log(details)
-           setorderDetails(details)
+            setorderDetails(details)
         });
 
     };
-  
+
 
     const onError = (data, actions) => {
         console.log("actions=", actions, "data=", data)
@@ -72,7 +76,6 @@ export default function Paypal(props) {
                     />
                 ) : null}
             </div>
-            {success?<Payment orderDetails={orderDetails}/>:null}
         </PayPalScriptProvider >
     );
 }
